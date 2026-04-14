@@ -9,3 +9,7 @@ description = "Shared protocol contracts for stim.io participants"
 [lib]
 name = "stim_proto"
 path = "src/lib.rs"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
