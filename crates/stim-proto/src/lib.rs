@@ -2,6 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use utoipa::ToSchema;
 
 /// Current crate version exposed for downstream bootstrap checks.
 pub const STIM_PROTO_VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -19,7 +20,7 @@ pub type Address = String;
 pub type Timestamp = String;
 pub type KeyRef = String;
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, ToSchema)]
 pub struct EndpointDeclaration {
     pub endpoint_id: EndpointId,
     pub node_id: NodeId,
@@ -32,7 +33,7 @@ pub struct EndpointDeclaration {
     pub declared_features: Vec<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, ToSchema)]
 pub struct DiscoveryRecord {
     pub node_id: NodeId,
     pub endpoint_declaration: EndpointDeclaration,
@@ -41,7 +42,7 @@ pub struct DiscoveryRecord {
     pub protocol_versions: Vec<ProtocolVersion>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, ToSchema)]
 pub struct DeliveryTarget {
     pub node_id: NodeId,
     pub carrier_kind: String,
@@ -49,33 +50,33 @@ pub struct DeliveryTarget {
     pub protocol_version: ProtocolVersion,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, ToSchema)]
 pub struct SessionBootstrap {
     pub participants: Vec<EndpointId>,
     pub created_by: EndpointId,
     pub created_at: Timestamp,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, ToSchema)]
 pub struct SenderAssertion {
     pub assertion_kind: String,
     pub reference: Option<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, ToSchema)]
 pub struct EncryptionScope {
     pub scope_kind: String,
     pub session_id: Option<ConversationId>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum MessageState {
     Pending,
     Fixed,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum MessageOperation {
     Create,
@@ -85,7 +86,7 @@ pub enum MessageOperation {
     Fix,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum DeliveryReceiptResult {
     Accepted,
@@ -94,14 +95,14 @@ pub enum DeliveryReceiptResult {
     TimedOut,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, ToSchema)]
 pub struct DeliveryReceipt {
     pub envelope_id: EnvelopeId,
     pub result: DeliveryReceiptResult,
     pub detail: Option<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum AcknowledgementResult {
     Applied,
@@ -112,7 +113,7 @@ pub enum AcknowledgementResult {
     UnauthorizedMutation,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, ToSchema)]
 pub struct ProtocolAcknowledgement {
     pub ack_envelope_id: EnvelopeId,
     pub ack_message_id: MessageId,
@@ -121,7 +122,7 @@ pub struct ProtocolAcknowledgement {
     pub detail: Option<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, ToSchema)]
 pub struct LayoutHint {
     pub layout_family: Option<String>,
     pub min_height_px: Option<u32>,
@@ -130,13 +131,13 @@ pub struct LayoutHint {
     pub metadata: Option<Value>,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, ToSchema)]
 pub struct MessageContent {
     pub parts: Vec<ContentPart>,
     pub layout_hint: Option<LayoutHint>,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, ToSchema)]
 #[serde(tag = "type", rename_all = "snake_case")]
 pub enum ContentPart {
     Text(TextPart),
@@ -145,7 +146,7 @@ pub enum ContentPart {
     CapabilityRef(CapabilityRefPart),
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, ToSchema)]
 pub struct TextPart {
     pub part_id: String,
     pub revision: u64,
@@ -153,7 +154,7 @@ pub struct TextPart {
     pub text: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, ToSchema)]
 pub struct AssetRefPart {
     pub part_id: String,
     pub revision: u64,
@@ -162,7 +163,7 @@ pub struct AssetRefPart {
     pub mime_type: Option<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, ToSchema)]
 #[serde(tag = "format", rename_all = "snake_case")]
 pub enum DomFragmentPayload {
     #[serde(rename = "stim-dom-fragment/v1")]
@@ -176,7 +177,7 @@ pub enum DomFragmentPayload {
     },
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, ToSchema)]
 pub struct DomFragmentPart {
     pub part_id: String,
     pub revision: u64,
@@ -185,7 +186,7 @@ pub struct DomFragmentPart {
     pub payload: DomFragmentPayload,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, ToSchema)]
 pub struct CapabilityRefPart {
     pub part_id: String,
     pub revision: u64,
@@ -196,19 +197,19 @@ pub struct CapabilityRefPart {
     pub resource_ref: Option<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, ToSchema)]
 pub struct PatchOperation {
     pub index: usize,
     pub merge: Value,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, ToSchema)]
 pub struct InsertOperation {
     pub index: usize,
     pub part: ContentPart,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, ToSchema)]
 #[serde(tag = "operation", rename_all = "snake_case")]
 pub enum MutationPayload {
     Create { content: MessageContent },
@@ -218,7 +219,7 @@ pub enum MutationPayload {
     Fix {},
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, ToSchema)]
 pub struct MessageEnvelope {
     pub protocol_version: ProtocolVersion,
     pub envelope_id: EnvelopeId,
