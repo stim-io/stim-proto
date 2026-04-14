@@ -1,0 +1,9 @@
+{
+  "name": "stim-proto-workspace",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.32.1",
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  }
+}

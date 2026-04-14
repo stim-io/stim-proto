@@ -1,0 +1,11 @@
+[package]
+name = "stim-proto"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Shared protocol contracts for stim.io participants"
+
+[lib]
+name = "stim_proto"
+path = "src/lib.rs"
