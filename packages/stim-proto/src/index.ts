@@ -6,6 +6,7 @@ export type EndpointId = string;
 export type ConversationId = string;
 export type EnvelopeId = string;
 export type MessageId = string;
+export type ReplyId = string;
 export type ProtocolVersion = string;
 export type Address = string;
 export type Timestamp = string;
@@ -83,6 +84,53 @@ export interface ProtocolAcknowledgement {
   ack_version: number;
   ack_result: AcknowledgementResult;
   detail?: string;
+}
+
+export type ReplyStatus = "pending" | "streaming" | "completed" | "failed";
+
+export interface ReplyHandle {
+  reply_id: ReplyId;
+  conversation_id: ConversationId;
+  message_id: MessageId;
+  status: ReplyStatus;
+}
+
+export interface ReplyFailure {
+  code: string;
+  message: string;
+}
+
+export interface ReplySnapshot {
+  reply_id: ReplyId;
+  conversation_id: ConversationId;
+  message_id: MessageId;
+  status: ReplyStatus;
+  output_text: string;
+  error?: ReplyFailure;
+}
+
+export type ReplyEventKind =
+  | {
+      type: "output_text_delta";
+      delta: string;
+    }
+  | {
+      type: "completed";
+    }
+  | {
+      type: "failed";
+      error: ReplyFailure;
+    };
+
+export interface ReplyEvent {
+  reply_id: ReplyId;
+  sequence: number;
+  event: ReplyEventKind;
+}
+
+export interface ProtocolSubmission {
+  acknowledgement: ProtocolAcknowledgement;
+  reply?: ReplyHandle;
 }
 
 export interface LayoutHint {
@@ -245,5 +293,21 @@ export const exampleEnvelope: MessageEnvelope = {
         vertical_pressure: "expand"
       }
     }
+  }
+};
+
+export const exampleProtocolSubmission: ProtocolSubmission = {
+  acknowledgement: {
+    ack_envelope_id: "ack-env-1",
+    ack_message_id: "msg-1",
+    ack_version: 3,
+    ack_result: "applied",
+    detail: "applied"
+  },
+  reply: {
+    reply_id: "reply-1",
+    conversation_id: "conv-1",
+    message_id: "msg-1",
+    status: "pending"
   }
 };

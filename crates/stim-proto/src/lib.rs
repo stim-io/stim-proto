@@ -15,6 +15,7 @@ pub type EndpointId = String;
 pub type ConversationId = String;
 pub type EnvelopeId = String;
 pub type MessageId = String;
+pub type ReplyId = String;
 pub type ProtocolVersion = String;
 pub type Address = String;
 pub type Timestamp = String;
@@ -120,6 +121,60 @@ pub struct ProtocolAcknowledgement {
     pub ack_version: u64,
     pub ack_result: AcknowledgementResult,
     pub detail: Option<String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, ToSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum ReplyStatus {
+    Pending,
+    Streaming,
+    Completed,
+    Failed,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, ToSchema)]
+pub struct ReplyHandle {
+    pub reply_id: ReplyId,
+    pub conversation_id: ConversationId,
+    pub message_id: MessageId,
+    pub status: ReplyStatus,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, ToSchema)]
+pub struct ReplyFailure {
+    pub code: String,
+    pub message: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, ToSchema)]
+pub struct ReplySnapshot {
+    pub reply_id: ReplyId,
+    pub conversation_id: ConversationId,
+    pub message_id: MessageId,
+    pub status: ReplyStatus,
+    pub output_text: String,
+    pub error: Option<ReplyFailure>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, ToSchema)]
+#[serde(tag = "type", rename_all = "snake_case")]
+pub enum ReplyEventKind {
+    OutputTextDelta { delta: String },
+    Completed,
+    Failed { error: ReplyFailure },
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, ToSchema)]
+pub struct ReplyEvent {
+    pub reply_id: ReplyId,
+    pub sequence: u64,
+    pub event: ReplyEventKind,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, ToSchema)]
+pub struct ProtocolSubmission {
+    pub acknowledgement: ProtocolAcknowledgement,
+    pub reply: Option<ReplyHandle>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, ToSchema)]
@@ -305,5 +360,52 @@ mod tests {
         let decoded: MessageEnvelope = serde_json::from_value(encoded).unwrap();
         assert_eq!(decoded.operation, MessageOperation::Create);
         assert_eq!(decoded.new_version, 1);
+    }
+
+    #[test]
+    fn protocol_submission_roundtrip_preserves_reply_handle_shape() {
+        let submission = ProtocolSubmission {
+            acknowledgement: ProtocolAcknowledgement {
+                ack_envelope_id: "ack-env-1".into(),
+                ack_message_id: "msg-1".into(),
+                ack_version: 3,
+                ack_result: AcknowledgementResult::Applied,
+                detail: Some("applied".into()),
+            },
+            reply: Some(ReplyHandle {
+                reply_id: "reply-1".into(),
+                conversation_id: "conv-1".into(),
+                message_id: "msg-1".into(),
+                status: ReplyStatus::Pending,
+            }),
+        };
+
+        let encoded = serde_json::to_value(&submission).unwrap();
+        assert_eq!(encoded["acknowledgement"]["ack_result"], "applied");
+        assert_eq!(encoded["reply"]["status"], "pending");
+
+        let decoded: ProtocolSubmission = serde_json::from_value(encoded).unwrap();
+        assert_eq!(decoded.reply.unwrap().reply_id, "reply-1");
+    }
+
+    #[test]
+    fn reply_event_roundtrip_preserves_failed_variant() {
+        let event = ReplyEvent {
+            reply_id: "reply-1".into(),
+            sequence: 2,
+            event: ReplyEventKind::Failed {
+                error: ReplyFailure {
+                    code: "provider_error".into(),
+                    message: "upstream failed".into(),
+                },
+            },
+        };
+
+        let encoded = serde_json::to_value(&event).unwrap();
+        assert_eq!(encoded["event"]["type"], "failed");
+        assert_eq!(encoded["event"]["error"]["code"], "provider_error");
+
+        let decoded: ReplyEvent = serde_json::from_value(encoded).unwrap();
+        assert_eq!(decoded.sequence, 2);
     }
 }
