@@ -11,7 +11,8 @@ At cold start, it stays intentionally small:
 - one Rust crate for Rust-side consumers
 - one TypeScript package for `stim` and other JS/TS-side consumers
 - explicit versioning from the start
-- local-development-first consumption posture before formal publishing automation exists
+- Rust-side consumption through Git revisions rather than published Rust release artifacts
+- npm package publication for TypeScript consumers through the dispatch-only publish workflow
 
 ## Current layout
 
@@ -22,7 +23,9 @@ At cold start, it stays intentionally small:
 
 The current baseline uses explicit prerelease versions in both language surfaces.
 
-For the first execution wave, local development may consume this repo through direct git/path attachment rather than formal package/crate publishing.
+For the first execution wave, Rust consumers should use Git revisions or local path overrides. Do not publish Rust crate artifacts until there is a concrete external distribution need.
+
+The TypeScript package may be published to GitHub Packages with `.github/workflows/publish-npm.yml`; that workflow builds and uploads the npm package artifact before publishing.
 
 That bootstrap convenience must not blur canonical ownership: `stim-proto` remains the source of truth for the shared contracts.
 
@@ -31,6 +34,7 @@ That bootstrap convenience must not blur canonical ownership: `stim-proto` remai
 - shared peer/discovery/message contract definitions
 - compatibility versioning for those shared contracts
 - language-level package/crate surfaces needed by participating repos
+- npm artifact publication for the TypeScript package
 - durable shared semantics that need to survive real architecture differences across `stim`, `stim-server`, and `santi`
 
 ## What this repo does not own
@@ -39,6 +43,7 @@ That bootstrap convenience must not blur canonical ownership: `stim-proto` remai
 - registry implementation
 - product UI/runtime behavior
 - one specific carrier such as P2P
+- Rust crate release publication or target-matrix Rust build artifacts at the current stage
 
 ## Architecture-difference rule
 

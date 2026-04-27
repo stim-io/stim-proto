@@ -1,8 +1,10 @@
 {
   "name": "@stim-io/stim-proto",
   "version": "0.1.0-dev.0",
-  "private": true,
   "type": "module",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "files": [
     "dist"
   ],
@@ -13,6 +15,7 @@
     }
   },
   "scripts": {
+    "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json"
   }
 }
