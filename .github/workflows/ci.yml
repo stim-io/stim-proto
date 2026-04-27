@@ -34,5 +34,5 @@ jobs:
       - name: Run Rust checks
         run: cargo test
 
-      - name: Run TS typecheck
-        run: pnpm -C packages/stim-proto typecheck
+      - name: Run TS package build
+        run: pnpm -C packages/stim-proto build

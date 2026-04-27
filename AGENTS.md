@@ -15,7 +15,7 @@ Detailed protocol design belongs in repo docs once the shared contract surface b
 - `stim-proto/` should absorb durable shared semantics that arise from real architecture differences across consumers, but it should not fossilize low-value mismatches that only create bridge code, duplicate paths, or protocol distortion.
 - Keep the initial split minimal: one Rust crate and one TypeScript package unless a real consumer pressure requires further decomposition.
 - Keep local cross-repo development practical from the start, but do not hide canonical ownership behind install-time magic.
-- Keep versioning explicit now even while formal publish/release automation remains deferred.
+- Keep versioning explicit. Publish only npm artifacts for the TypeScript package at this stage; Rust consumers should use Git revisions or local path overrides rather than published Rust release artifacts.
 - Avoid fake maturity: only add docs, workflows, or package structure that support the real first execution wave.
 
 ## Git / CI Baseline
@@ -29,6 +29,7 @@ Detailed protocol design belongs in repo docs once the shared contract surface b
 
 - Run Rust checks: `cargo test`
 - Install JS dependencies: `pnpm install`
+- Build TS package: `pnpm -C packages/stim-proto build`
 - Typecheck TS package: `pnpm -C packages/stim-proto typecheck`
 
 ## Key File Index
@@ -38,6 +39,7 @@ Detailed protocol design belongs in repo docs once the shared contract surface b
 - `Cargo.toml`: Rust workspace root
 - `package.json`: JS workspace root
 - `.github/workflows/ci.yml`: minimal executable CI baseline
+- `.github/workflows/publish-npm.yml`: dispatch-only npm artifact publish workflow
 
 ## Update Rules
 
