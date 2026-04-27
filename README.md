@@ -31,6 +31,7 @@ That bootstrap convenience must not blur canonical ownership: `stim-proto` remai
 - shared peer/discovery/message contract definitions
 - compatibility versioning for those shared contracts
 - language-level package/crate surfaces needed by participating repos
+- durable shared semantics that need to survive real architecture differences across `stim`, `stim-server`, and `santi`
 
 ## What this repo does not own
 
@@ -38,3 +39,9 @@ That bootstrap convenience must not blur canonical ownership: `stim-proto` remai
 - registry implementation
 - product UI/runtime behavior
 - one specific carrier such as P2P
+
+## Architecture-difference rule
+
+`stim-proto` should absorb real shared semantic differences between consumers when those differences belong in the protocol boundary.
+
+But it should not preserve every existing mismatch. If a difference only forces bridge code, duplicate paths, or distorted protocol shapes, the right move is to simplify the architecture rather than encode that mismatch as durable protocol surface.

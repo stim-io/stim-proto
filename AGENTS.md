@@ -12,6 +12,7 @@ Detailed protocol design belongs in repo docs once the shared contract surface b
 ## Core Constraints
 
 - `stim-proto/` owns shared peer, discovery, and message contract definitions; it must not drift into transport implementation, registry implementation, or product/runtime behavior.
+- `stim-proto/` should absorb durable shared semantics that arise from real architecture differences across consumers, but it should not fossilize low-value mismatches that only create bridge code, duplicate paths, or protocol distortion.
 - Keep the initial split minimal: one Rust crate and one TypeScript package unless a real consumer pressure requires further decomposition.
 - Keep local cross-repo development practical from the start, but do not hide canonical ownership behind install-time magic.
 - Keep versioning explicit now even while formal publish/release automation remains deferred.
