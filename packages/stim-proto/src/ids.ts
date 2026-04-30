@@ -1,0 +1,10 @@
+export type NodeId = string;
+export type EndpointId = string;
+export type ConversationId = string;
+export type EnvelopeId = string;
+export type MessageId = string;
+export type ReplyId = string;
+export type ProtocolVersion = string;
+export type Address = string;
+export type Timestamp = string;
+export type KeyRef = string;

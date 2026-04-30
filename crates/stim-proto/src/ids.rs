@@ -1,0 +1,10 @@
+pub type NodeId = String;
+pub type EndpointId = String;
+pub type ConversationId = String;
+pub type EnvelopeId = String;
+pub type MessageId = String;
+pub type ReplyId = String;
+pub type ProtocolVersion = String;
+pub type Address = String;
+pub type Timestamp = String;
+pub type KeyRef = String;
