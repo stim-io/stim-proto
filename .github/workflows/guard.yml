@@ -1,4 +1,4 @@
-name: ci
+name: guard
 
 on:
   pull_request:
@@ -6,8 +6,11 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
-  baseline:
+  guard:
     runs-on: ubuntu-latest
 
     steps:
@@ -31,8 +34,5 @@ jobs:
       - name: Install JS dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Run Rust checks
-        run: cargo test
-
-      - name: Run TS package build
-        run: pnpm -C packages/stim-proto build
+      - name: Run guard
+        run: bash scripts/guard.sh

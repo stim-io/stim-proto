@@ -23,12 +23,13 @@ Detailed protocol design belongs in repo docs once the shared contract surface b
 - `main` should advance through PRs rather than direct pushes.
 - Keep force-push protection and branch-deletion protection enabled for `main`.
 - Keep squash merge as the default history strategy.
-- Keep required green checks in front of merge once `.github/workflows/ci.yml` is active.
+- Keep required green checks in front of merge once `.github/workflows/guard.yml` is active.
 
 ## Common Commands
 
 - Run Rust checks: `cargo test`
 - Install JS dependencies: `pnpm install`
+- Run repo guard: `bash scripts/guard.sh`
 - Build TS package: `pnpm -C packages/stim-proto build`
 - Typecheck TS package: `pnpm -C packages/stim-proto typecheck`
 
@@ -38,7 +39,8 @@ Detailed protocol design belongs in repo docs once the shared contract surface b
 - `README.md`: repo purpose and local-development posture
 - `Cargo.toml`: Rust workspace root
 - `package.json`: JS workspace root
-- `.github/workflows/ci.yml`: minimal executable CI baseline
+- `scripts/guard.sh`: minimal executable guard entrypoint
+- `.github/workflows/guard.yml`: minimal executable guard baseline
 - `.github/workflows/publish-npm.yml`: dispatch-only npm artifact publish workflow
 
 ## Update Rules
