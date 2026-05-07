@@ -1,4 +1,5 @@
 import type { MessageEnvelope } from "./message.js";
+import type { MessageFactEnvelope } from "./messageFacts.js";
 import type { ProtocolSubmission } from "./delivery.js";
 import { CURRENT_PROTOCOL_VERSION } from "./version.js";
 
@@ -65,5 +66,47 @@ export const exampleProtocolSubmission: ProtocolSubmission = {
     conversation_id: "conv-1",
     message_id: "msg-1",
     status: "pending"
+  }
+};
+
+export const exampleMessageFact: MessageFactEnvelope = {
+  protocol_version: CURRENT_PROTOCOL_VERSION,
+  fact_id: "fact-1",
+  fact_type: "created",
+  ledger_id: "stim-server:ledger:main",
+  conversation_id: "conv-1",
+  message_id: "msg-1",
+  participant_id: "participant-santi",
+  kind: {
+    code: "text"
+  },
+  occurred_at: "2026-05-07T00:00:00Z",
+  observed_at: "2026-05-07T00:00:01Z",
+  ledger_seq: 42,
+  correlation_id: "corr-1",
+  source: {
+    source_kind: "stim-server",
+    endpoint_id: "endpoint-santi",
+    agent_id: "agent-santi",
+    instance_id: "local-santi"
+  },
+  content_ref: {
+    content_id: "content-1",
+    revision_id: "rev-1",
+    kind: {
+      code: "text"
+    },
+    storage: {
+      storage_kind: "table",
+      table: "message_text",
+      key: "content-1"
+    },
+    mime_type: "text/plain",
+    byte_size: 11,
+    checksum: "sha256:abc"
+  },
+  projection_state: "visible",
+  metadata: {
+    projection: "columnar-ready"
   }
 };

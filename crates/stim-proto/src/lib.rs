@@ -5,6 +5,7 @@ mod delivery;
 mod discovery;
 mod ids;
 mod message;
+mod message_facts;
 mod reply;
 
 pub use content::*;
@@ -12,6 +13,7 @@ pub use delivery::*;
 pub use discovery::*;
 pub use ids::*;
 pub use message::*;
+pub use message_facts::*;
 pub use reply::*;
 
 /// Current crate version exposed for downstream bootstrap checks.

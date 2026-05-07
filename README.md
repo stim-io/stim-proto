@@ -32,6 +32,7 @@ That bootstrap convenience must not blur canonical ownership: `stim-proto` remai
 ## What this repo owns
 
 - shared peer/discovery/message contract definitions
+- shared message fact, content-reference, and relation semantics
 - compatibility versioning for those shared contracts
 - language-level package/crate surfaces needed by participating repos
 - npm artifact publication for the TypeScript package
@@ -50,3 +51,7 @@ That bootstrap convenience must not blur canonical ownership: `stim-proto` remai
 `stim-proto` should absorb real shared semantic differences between consumers when those differences belong in the protocol boundary.
 
 But it should not preserve every existing mismatch. If a difference only forces bridge code, duplicate paths, or distorted protocol shapes, the right move is to simplify the architecture rather than encode that mismatch as durable protocol surface.
+
+## Current contracts
+
+- `docs/message-ledger-contract.md` defines the additive shared message-ledger fact, content-reference, and relation model. It is columnar-ready contract surface, not a directive to make a columnar database the online IM source of truth.

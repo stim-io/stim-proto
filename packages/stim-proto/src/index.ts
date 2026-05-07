@@ -4,5 +4,6 @@ export * from "./discovery.js";
 export * from "./examples.js";
 export * from "./ids.js";
 export * from "./message.js";
+export * from "./messageFacts.js";
 export * from "./reply.js";
 export * from "./version.js";
