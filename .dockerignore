@@ -1,0 +1,13 @@
+.git
+target
+**/target
+node_modules
+**/node_modules
+dist
+**/dist
+**/.env
+**/.env.*
+!**/.env.example
+**/.DS_Store
+**/.idea
+**/.vscode

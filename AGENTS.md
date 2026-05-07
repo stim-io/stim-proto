@@ -42,6 +42,7 @@ Detailed protocol design belongs in repo docs once the shared contract surface b
 - `scripts/guard.sh`: minimal executable guard entrypoint
 - `.github/workflows/guard.yml`: minimal executable guard baseline
 - `.github/workflows/publish-npm.yml`: dispatch-only npm artifact publish workflow
+- `docs/message-ledger-contract.md`: shared message fact/content-reference/relation semantics
 
 ## Update Rules
 
