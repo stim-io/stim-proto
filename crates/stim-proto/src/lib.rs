@@ -1,6 +1,7 @@
 //! Shared protocol contracts for `stim.io` participants.
 
 mod content;
+mod control_plane;
 mod delivery;
 mod discovery;
 mod ids;
@@ -9,6 +10,7 @@ mod message_facts;
 mod reply;
 
 pub use content::*;
+pub use control_plane::*;
 pub use delivery::*;
 pub use discovery::*;
 pub use ids::*;
